@@ -25,7 +25,28 @@
             },
             "mainServer": true,
             "autoconnect": true,
-            "modules": []
+            "modules": [
+                {
+                    "id": "net.minecraftforge:forge:1.12.2-13.20.1.2429",
+                    "name": "Minecraft Forge",
+                    "type": "ForgeHosted",
+                    "artifact": {
+                        "size": 4888981,
+                        "MD5": "b21ac8c1404ee9a03f4f4c99385ac815",
+                        "url": "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2768/forge-1.12.2-14.23.5.2768-universal.jar"
+                    }
+                },
+                {
+                    "id": "net.optifine:optifine:1.12.2_HD_U_F5",
+                    "name": "Optifine",
+                    "type": "ForgeMod",
+                    "artifact": {
+                        "size": 2598821,
+                        "MD5": "043ac1db6f7441ea4cf31bcb621aff0b",
+                        "url": "http://mc.westeroscraft.com/WesterosCraftLauncher/prod-1.11.2/mods/OptiFine.jar"
+                    }
+                }
+            ]
         }
     ]
 }
