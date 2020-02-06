@@ -1,10 +1,6 @@
 {
   "name": "universallegendslauncher",
-<<<<<<< HEAD
   "version": "1.0.0",
-=======
-  "version": "1.0",
->>>>>>> 5e07751ad061f5cd62d0756afaa149de9b8caf7b
   "productName": "Universal Legends",
   "description": "Launcher para Universal Legends",
   "author": "Daniel Scalzi (https://github.com/dscalzi/)",
