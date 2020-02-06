@@ -537,7 +537,7 @@ exports.pullRemote = function(){
         return exports.pullLocal()
     }
     return new Promise((resolve, reject) => {
-        //const distroURL = 'http://mc.westeroscraft.com/WesterosCraftLauncher/distribution.json'
+        //const distroURL = 'http://mc.universallegends.com/universallegendsLauncher/distribution.json'
         const distroURL = 'https://raw.githubusercontent.com/Clyzer/UniversalLegends/master/app/assets/distribution.json'
         const opts = {
             url: distroURL,
