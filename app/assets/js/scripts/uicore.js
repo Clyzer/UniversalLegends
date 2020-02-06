@@ -24,13 +24,6 @@ window.eval = global.eval = function () {
     throw new Error('Sorry, this app does not support window.eval().')
 }
 
-// Display warning when devtools window is opened.
-remote.getCurrentWebContents().on('devtools-opened', () => {
-    console.log('%cThe console is dark and full of terrors.', 'color: white; -webkit-text-stroke: 4px #a02d2a; font-size: 60px; font-weight: bold')
-    console.log('%cIf you\'ve been told to paste something here, you\'re being scammed.', 'font-size: 16px')
-    console.log('%cUnless you know exactly what you\'re doing, close this window.', 'font-size: 16px')
-})
-
 // Disable zoom, needed for darwin.
 webFrame.setZoomLevel(0)
 webFrame.setVisualZoomLevelLimits(1, 1)
@@ -42,22 +35,22 @@ if(!isDev){
     ipcRenderer.on('autoUpdateNotification', (event, arg, info) => {
         switch(arg){
             case 'checking-for-update':
-                loggerAutoUpdater.log('Checking for update..')
-                settingsUpdateButtonStatus('Checking for Updates..', true)
+                loggerAutoUpdater.log('Revisando actualizaciones...')
+                settingsUpdateButtonStatus('Revisando actualizaciones..', true)
                 break
             case 'update-available':
-                loggerAutoUpdaterSuccess.log('New update available', info.version)
+                loggerAutoUpdaterSuccess.log('Nueva actualización disponible.', info.version)
                 
                 if(process.platform === 'darwin'){
-                    info.darwindownload = `https://github.com/dscalzi/UniversalLegends/releases/download/v${info.version}/UniversalLegends-${info.version}.dmg`
+                    info.darwindownload = `https://github.com/Clyzer/UniversalLegends/releases/download/v${info.version}/UniversalLegends-${info.version}.dmg`
                     showUpdateUI(info)
                 }
                 
                 populateSettingsUpdateInformation(info)
                 break
             case 'update-downloaded':
-                loggerAutoUpdaterSuccess.log('Update ' + info.version + ' ready to be installed.')
-                settingsUpdateButtonStatus('Install Now', false, () => {
+                loggerAutoUpdaterSuccess.log('La actualización ' + info.version + ' está lista para ser instalada.')
+                settingsUpdateButtonStatus('Instalar ahora', false, () => {
                     if(!isDev){
                         ipcRenderer.send('autoUpdateAction', 'installUpdateNow')
                     }
@@ -65,8 +58,8 @@ if(!isDev){
                 showUpdateUI(info)
                 break
             case 'update-not-available':
-                loggerAutoUpdater.log('No new update found.')
-                settingsUpdateButtonStatus('Check for Updates')
+                loggerAutoUpdater.log('No se han encontrado actualizaciones.')
+                settingsUpdateButtonStatus('Revisar actualizaciones')
                 break
             case 'ready':
                 updateCheckListener = setInterval(() => {
@@ -77,17 +70,17 @@ if(!isDev){
             case 'realerror':
                 if(info != null && info.code != null){
                     if(info.code === 'ERR_UPDATER_INVALID_RELEASE_FEED'){
-                        loggerAutoUpdater.log('No suitable releases found.')
+                        loggerAutoUpdater.log('No se han encontrado actualizaciones.')
                     } else if(info.code === 'ERR_XML_MISSED_ELEMENT'){
-                        loggerAutoUpdater.log('No releases found.')
+                        loggerAutoUpdater.log('No se han encontrado actualizaciones.')
                     } else {
-                        loggerAutoUpdater.error('Error during update check..', info)
-                        loggerAutoUpdater.debug('Error Code:', info.code)
+                        loggerAutoUpdater.error('Error durante la búsqueda de actualizaciones..', info)
+                        loggerAutoUpdater.debug('Código del Error:', info.code)
                     }
                 }
                 break
             default:
-                loggerAutoUpdater.log('Unknown argument', arg)
+                loggerAutoUpdater.log('Argumento desconocido', arg)
                 break
         }
     })
@@ -109,7 +102,7 @@ function showUpdateUI(info){
     //TODO Make this message a bit more informative `${info.version}`
     document.getElementById('image_seal_container').setAttribute('update', true)
     document.getElementById('image_seal_container').onclick = () => {
-        /*setOverlayContent('Update Available', 'A new update for the launcher is available. Would you like to install now?', 'Install', 'Later')
+        /*setOverlayContent('Actualización disponible', 'Una nueva actualización para el lanzador está disponible. ¿Desea instalar ahora?', 'Instalar', 'Despues')
         setOverlayHandler(() => {
             if(!isDev){
                 ipcRenderer.send('autoUpdateAction', 'installUpdateNow')

@@ -8,14 +8,14 @@
     "java": {
         "oracle": "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html"
     },
-    "rss": "https://universallegends.com/articles/index.rss",
+    "rss": "https://elpais.com/tag/rss/latinoamerica/a/",
     "servers": [
         {
             "id": "UniversalLegends-1.12.2",
             "name": "Servidor de Universal Legends",
             "description": "Servidor principal de Universal Legends.",
             "icon": "https://github.com/Clyzer/UniversalLegends/raw/master/app/assets/images/LoadingSeal.png",
-            "version": "1.0",
+            "version": "1.0.0",
             "address": "172.106.3.20",
             "minecraftVersion": "1.12.2",
             "discord": {

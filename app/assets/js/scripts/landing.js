@@ -23,6 +23,10 @@ const user_text               = document.getElementById('user_text')
 
 const loggerLanding = LoggerUtil('%c[Landing]', 'color: #000668; font-weight: bold')
 
+// Tienda
+
+var tienda = null
+
 /* Launch Progress Wrapper Functions */
 
 /**
@@ -144,14 +148,14 @@ function updateSelectedServer(serv){
     }
     ConfigManager.setSelectedServer(serv != null ? serv.getID() : null)
     ConfigManager.save()
-    server_selection_button.innerHTML = '\u2022 ' + (serv != null ? serv.getName() : 'No Server Selected')
+    server_selection_button.innerHTML = '\u2022 ' + (serv != null ? serv.getName() : 'Ningún servidor seleccionado')
     if(getCurrentView() === VIEWS.settings){
         animateModsTabRefresh()
     }
     setLaunchEnabled(serv != null)
 }
 // Real text is set in uibinder.js on distributionIndexDone.
-server_selection_button.innerHTML = '\u2022 Loading..'
+server_selection_button.innerHTML = '\u2022 Cargando..'
 server_selection_button.onclick = (e) => {
     e.target.blur()
     toggleServerSelection(true)
@@ -287,7 +291,7 @@ let extractListener
  */
 function asyncSystemScan(mcVersion, launchAfter = true){
 
-    setLaunchDetails('Please wait..')
+    setLaunchDetails('Por favor espera..')
     toggleLaunchArea(true)
     setLaunchPercentage(0, 100)
 
@@ -328,7 +332,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
                     'Install Manually'
                 )
                 setOverlayHandler(() => {
-                    setLaunchDetails('Preparing Java Download..')
+                    setLaunchDetails('Preparando la descarga de Java..')
                     sysAEx.send({task: 'changeContext', class: 'AssetGuard', args: [ConfigManager.getCommonDirectory(),ConfigManager.getJavaExecutable()]})
                     sysAEx.send({task: 'execute', function: '_enqueueOpenJDK', argsArr: [ConfigManager.getDataDirectory()]})
                     toggleOverlay(false)
@@ -338,7 +342,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
                         //$('#overlayDismiss').toggle(false)
                         setOverlayContent(
                             'Java is Required<br>to Launch',
-                            'A valid x64 installation of Java 8 is required to launch.<br><br>Please refer to our <a href="https://github.com/dscalzi/UniversalLegends/wiki/Java-Management#manually-installing-a-valid-version-of-java">Java Management Guide</a> for instructions on how to manually install Java.',
+                            'A valid x64 installation of Java 8 is required to launch.<br><br>Please refer to our <a href="https://github.com/Clyzer/UniversalLegends/wiki/Java-Management#manually-installing-a-valid-version-of-java">Java Management Guide</a> for instructions on how to manually install Java.',
                             'I Understand',
                             'Go Back'
                         )
@@ -375,7 +379,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
             if(m.result === true){
 
                 // Oracle JRE enqueued successfully, begin download.
-                setLaunchDetails('Downloading Java..')
+                setLaunchDetails('Descargando Java..')
                 sysAEx.send({task: 'execute', function: 'processDlQueues', argsArr: [[{id:'java', limit:1}]]})
 
             } else {
@@ -384,7 +388,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
                 // User will have to follow the guide to install Java.
                 setOverlayContent(
                     'Unexpected Issue:<br>Java Download Failed',
-                    'Unfortunately we\'ve encountered an issue while attempting to install Java. You will need to manually install a copy. Please check out our <a href="https://github.com/dscalzi/UniversalLegends/wiki">Troubleshooting Guide</a> for more details and instructions.',
+                    'Unfortunately we\'ve encountered an issue while attempting to install Java. You will need to manually install a copy. Please check out our <a href="https://github.com/Clyzer/UniversalLegends/wiki">Troubleshooting Guide</a> for more details and instructions.',
                     'I Understand'
                 )
                 setOverlayHandler(() => {
@@ -413,7 +417,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
                     remote.getCurrentWindow().setProgressBar(2)
 
                     // Wait for extration to complete.
-                    const eLStr = 'Extracting'
+                    const eLStr = 'Extrayendo'
                     let dotStr = ''
                     setLaunchDetails(eLStr)
                     extractListener = setInterval(() => {
@@ -439,7 +443,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
                         extractListener = null
                     }
 
-                    setLaunchDetails('Java Installed!')
+                    setLaunchDetails('¡Java instalado!')
 
                     if(launchAfter){
                         dlAsync()
@@ -455,7 +459,7 @@ function asyncSystemScan(mcVersion, launchAfter = true){
     })
 
     // Begin system Java scan.
-    setLaunchDetails('Checking system info..')
+    setLaunchDetails('Comprobando la información del sistema..')
     sysAEx.send({task: 'execute', function: 'validateJava', argsArr: [ConfigManager.getDataDirectory()]})
 
 }
@@ -488,7 +492,7 @@ function dlAsync(login = true){
         }
     }
 
-    setLaunchDetails('Please wait..')
+    setLaunchDetails('Por favor espera..')
     toggleLaunchArea(true)
     setLaunchPercentage(0, 100)
 
@@ -536,27 +540,27 @@ function dlAsync(login = true){
                 case 'distribution':
                     setLaunchPercentage(20, 100)
                     loggerLaunchSuite.log('Validated distibution index.')
-                    setLaunchDetails('Loading version information..')
+                    setLaunchDetails('Cargando información de la versión..')
                     break
                 case 'version':
                     setLaunchPercentage(40, 100)
                     loggerLaunchSuite.log('Version data loaded.')
-                    setLaunchDetails('Validating asset integrity..')
+                    setLaunchDetails('Validando integridad de archivos..')
                     break
                 case 'assets':
                     setLaunchPercentage(60, 100)
                     loggerLaunchSuite.log('Asset Validation Complete')
-                    setLaunchDetails('Validating library integrity..')
+                    setLaunchDetails('Validando integridad de librerias..')
                     break
                 case 'libraries':
                     setLaunchPercentage(80, 100)
                     loggerLaunchSuite.log('Library validation complete.')
-                    setLaunchDetails('Validating miscellaneous file integrity..')
+                    setLaunchDetails('Validando integridad de archivos extra..')
                     break
                 case 'files':
                     setLaunchPercentage(100, 100)
                     loggerLaunchSuite.log('File validation complete.')
-                    setLaunchDetails('Downloading files..')
+                    setLaunchDetails('Descargando archivos..')
                     break
             }
         } else if(m.context === 'progress'){
@@ -574,7 +578,7 @@ function dlAsync(login = true){
                     remote.getCurrentWindow().setProgressBar(2)
 
                     // Download done, extracting.
-                    const eLStr = 'Extracting libraries'
+                    const eLStr = 'Extrayendo libreria'
                     let dotStr = ''
                     setLaunchDetails(eLStr)
                     progressListener = setInterval(() => {
@@ -598,7 +602,7 @@ function dlAsync(login = true){
                         progressListener = null
                     }
 
-                    setLaunchDetails('Preparing to launch..')
+                    setLaunchDetails('Preparándose para lanzar..')
                     break
             }
         } else if(m.context === 'error'){
@@ -645,7 +649,7 @@ function dlAsync(login = true){
                 const authUser = ConfigManager.getSelectedAccount()
                 loggerLaunchSuite.log(`Sending selected account (${authUser.displayName}) to ProcessBuilder.`)
                 let pb = new ProcessBuilder(serv, versionData, forgeData, authUser, remote.app.getVersion())
-                setLaunchDetails('Launching game..')
+                setLaunchDetails('Abriendo juego..')
 
                 // Attach a temporary listener to the client output.
                 // Will wait for a certain bit of text meaning that
@@ -655,7 +659,7 @@ function dlAsync(login = true){
                     if(GAME_LAUNCH_REGEX.test(data.trim())){
                         toggleLaunchArea(false)
                         if(hasRPC){
-                            DiscordWrapper.updateDetails('Loading game..')
+                            DiscordWrapper.updateDetails('Cargando juego..')
                         }
                         proc.stdout.on('data', gameStateChange)
                         proc.stdout.removeListener('data', tempListener)
@@ -667,9 +671,9 @@ function dlAsync(login = true){
                 const gameStateChange = function(data){
                     data = data.trim()
                     if(SERVER_JOINED_REGEX.test(data)){
-                        DiscordWrapper.updateDetails('Exploring the Realm!')
+                        DiscordWrapper.updateDetails('Jugando en Universal Legends')
                     } else if(GAME_JOINED_REGEX.test(data)){
-                        DiscordWrapper.updateDetails('Sailing to Westeros!')
+                        DiscordWrapper.updateDetails('Jugando en Universal Legends')
                     }
                 }
 
@@ -677,7 +681,7 @@ function dlAsync(login = true){
                     data = data.trim()
                     if(data.indexOf('Could not find or load main class net.minecraft.launchwrapper.Launch') > -1){
                         loggerLaunchSuite.error('Game launch failed, LaunchWrapper was not downloaded properly.')
-                        showLaunchFailure('Error During Launch', 'The main file, LaunchWrapper, failed to download properly. As a result, the game cannot launch.<br><br>To fix this issue, temporarily turn off your antivirus software and launch the game again.<br><br>If you have time, please <a href="https://github.com/dscalzi/UniversalLegends/issues">submit an issue</a> and let us know what antivirus software you use. We\'ll contact them and try to straighten things out.')
+                        showLaunchFailure('Error durante el lanzamiento', 'El archivo principal, LaunchWrapper, no se pudo descargar correctamente. Como resultado, el juego no puede iniciarse.<br><br>Para solucionar este problema, apague temporalmente su software antivirus y vuelva a iniciar el juego.<br><br>Si tiene tiempo, por favor <a href = "https://github.com/Clyzer/UniversalLegends/issues">envíe un reporte</a> y díganos qué software antivirus utiliza. Nos pondremos en contacto con ellos e intentaremos arreglar las cosas.')
                     }
                 }
 
@@ -689,7 +693,7 @@ function dlAsync(login = true){
                     proc.stdout.on('data', tempListener)
                     proc.stderr.on('data', gameErrorListener)
 
-                    setLaunchDetails('Done. Enjoy the server!')
+                    setLaunchDetails('Listo. ¡Disfruta el servidor!')
 
                     // Init Discord Hook
                     const distro = DistroManager.getDistribution()
@@ -707,7 +711,7 @@ function dlAsync(login = true){
                 } catch(err) {
 
                     loggerLaunchSuite.error('Error during launch', err)
-                    showLaunchFailure('Error During Launch', 'Please check the console (CTRL + Shift + i) for more details.')
+                    showLaunchFailure('Error durante el lanzamiento', 'Verifique la consola (CTRL + Shift + i) para más detalles.')
 
                 }
             }
@@ -721,7 +725,7 @@ function dlAsync(login = true){
     // Begin Validations
 
     // Validate Forge files.
-    setLaunchDetails('Loading server information..')
+    setLaunchDetails('Cargando información del servidor..')
 
     refreshDistributionIndex(true, (data) => {
         onDistroRefresh(data)
@@ -764,6 +768,7 @@ const nELoadSpan                    = document.getElementById('nELoadSpan')
 
 // News slide caches.
 let newsActive = false
+let tiendaActiva = false
 let newsGlideCount = 0
 
 /**
@@ -848,7 +853,7 @@ let newsLoadingListener = null
  */
 function setNewsLoading(val){
     if(val){
-        const nLStr = 'Checking for News'
+        const nLStr = 'Buscando noticias'
         let dotStr = '..'
         nELoadSpan.innerHTML = nLStr + dotStr
         newsLoadingListener = setInterval(() => {
@@ -1018,6 +1023,33 @@ function initNews(){
         
     })
 }
+
+//function activarTienda() {
+//    tienda = document.createElement("iframe");
+//    tienda.setAttribute("src", "https://www.tiendainglesa.com.uy/");
+//    tienda.style.width = "85%";
+//    tienda.style.height = "95%";
+//    tienda.style.zIndex = "10";
+//    tienda.style.marginLeft = "6%";
+//    tienda.style.marginTop = "2%";
+//    tienda.style.borderWidth = "0px";
+//    document.getElementById("content").appendChild(tienda);
+//}
+//
+//function desactivarTienda() {
+//    document.getElementById("content").removeChild(tienda);
+//}
+//
+//// Bind boton de tienda.
+//document.getElementById('image_seal').onclick = () => {
+//    if(tiendaActiva){
+//        desactivarTienda()
+//        tiendaActiva = !tiendaActiva;
+//    } else {
+//        activarTienda()
+//        tiendaActiva = !tiendaActiva;
+//    }
+//}
 
 /**
  * Add keyboard controls to the news UI. Left and right arrows toggle

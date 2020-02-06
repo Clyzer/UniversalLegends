@@ -3295,7 +3295,7 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Span which displays information about the status of the launch process. */
 #launch_details_text {
-    font-size: 11px;
+    font-size: 9px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

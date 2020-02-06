@@ -58,7 +58,7 @@ function getCurrentView(){
 function showMainUI(data){
 
     if(!isDev){
-        loggerAutoUpdater.log('Initializing..')
+        loggerAutoUpdater.log('Iniciando..')
         ipcRenderer.send('autoUpdateAction', 'initAutoUpdater', ConfigManager.getAllowPrerelease())
     }
 
@@ -109,9 +109,9 @@ function showFatalStartupError(){
         $('#loadingContainer').fadeOut(250, () => {
             document.getElementById('overlayContainer').style.background = 'none'
             setOverlayContent(
-                'Fatal Error: Unable to Load Distribution Index',
-                'A connection could not be established to our servers to download the distribution index. No local copies were available to load. <br><br>The distribution index is an essential file which provides the latest server information. The launcher is unable to start without it. Ensure you are connected to the internet and relaunch the application.',
-                'Close'
+                'Error Fatal: No se ha podido cargar el contenedor',
+                'No se ha podido encontrar una conexión en nuestros servidores para descargar el Launcher. No hay copias locales para copiar. <br><br>La página de distribuición es una cosa esencial para entregar información. El launcher no puede iniciarse sin esto. Asegurate de que estés conectado a Internet y recarga el Launcher.',
+                'Cerrar'
             )
             setOverlayHandler(() => {
                 const window = remote.getCurrentWindow()
@@ -323,10 +323,10 @@ async function validateSelectedAccount(){
             ConfigManager.save()
             const accLen = Object.keys(ConfigManager.getAuthAccounts()).length
             setOverlayContent(
-                'Failed to Refresh Login',
-                `We were unable to refresh the login for <strong>${selectedAcc.displayName}</strong>. Please ${accLen > 0 ? 'select another account or ' : ''} login again.`,
-                'Login',
-                'Select Another Account'
+                'Ha fallado la recarga de logeo.',
+                `No podemos recargar la sesión <strong>${selectedAcc.displayName}</strong>. Por favor ${accLen > 0 ? 'selecciona otra cuenta o ' : ''} ingresa nuevamente.`,
+                'Ingresar',
+                'Seleccionar otra cuenta'
             )
             setOverlayHandler(() => {
                 document.getElementById('loginUsername').value = selectedAcc.username
